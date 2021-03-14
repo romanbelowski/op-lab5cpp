@@ -1,6 +1,5 @@
 #include "token.hpp"
 
-#include <iostream>
 #include <stdexcept>
 
 using namespace std;
@@ -12,6 +11,10 @@ bool Token::IsOperator(string str) {
   if (OPERATORS.find(str) != string::npos)
     return true;
   return false;
+}
+
+int ValueToken::GetValue() {
+  return value_;
 }
 
 // Повертає приорітет оператора
