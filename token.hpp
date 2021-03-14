@@ -1,5 +1,7 @@
 #include <string>
 
+extern const std::string OPERATORS;
+
 class Token {
  public:
   bool IsOperator(std::string str);

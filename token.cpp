@@ -4,7 +4,7 @@
 
 using namespace std;
 
-string OPERATORS = "+-*/";
+const string OPERATORS = "+-*/";
 
 Token::Token(string value) {
   token = value;
