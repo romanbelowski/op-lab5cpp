@@ -23,5 +23,11 @@ int main(int argc, char* argv[]) {
   cout << expression << endl;
   cout << OPERATORS << endl;
 
+  OperatorToken plus = OperatorToken("+");
+  ValueToken five = ValueToken("5");
+  ValueToken ten = ValueToken("10");
+
+  cout << plus.Calculate(five, ten) << endl;
+
   return 0;
 }

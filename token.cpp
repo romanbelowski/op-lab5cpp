@@ -29,7 +29,9 @@ int OperatorToken::GetPrecedence() {
 }
 
 // Обчислює результат бінарного оператора
-int OperatorToken::Calculate(int x, int y) {
+int OperatorToken::Calculate(ValueToken a, ValueToken b) {
+  int x = a.GetValue(),
+      y = b.GetValue();
   switch (operator_) {
     case '+':
       return x + y;

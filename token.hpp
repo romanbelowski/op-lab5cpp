@@ -11,17 +11,6 @@ class Token {
   virtual bool GetIsOperator() { return false; };
 };
 
-class OperatorToken : public Token {
- public:
-  OperatorToken(std::string token) : operator_(token[0]){};
-  int GetPrecedence();
-  int Calculate(int, int);
-  bool GetIsOperator() { return true; };
-
- private:
-  char operator_;
-};
-
 class ValueToken : public Token {
  public:
   ValueToken(std::string token) : value_(stoi(token)){};
@@ -30,4 +19,15 @@ class ValueToken : public Token {
 
  private:
   float value_;
+};
+
+class OperatorToken : public Token {
+ public:
+  OperatorToken(std::string token) : operator_(token[0]){};
+  int Calculate(ValueToken, ValueToken);
+  int GetPrecedence();
+  bool GetIsOperator() { return true; };
+
+ private:
+  char operator_;
 };
