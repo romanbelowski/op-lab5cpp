@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
   cout << expression << endl;
   RemoveSpaces(expression);
   cout << expression << endl;
-
   cout << OPERATORS << endl;
+
   return 0;
 }
