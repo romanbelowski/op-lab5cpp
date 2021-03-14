@@ -1,42 +1,45 @@
 #include "token.hpp"
 
 #include <iostream>
+#include <stdexcept>
 
 using namespace std;
 
 const string OPERATORS = "+-*/";
 
-Token::Token(string value) {
-  token = value;
-}
-
+// Перевіряє чи символ є оператором
 bool Token::IsOperator(string str) {
   if (OPERATORS.find(str) != string::npos)
     return true;
   return false;
 }
 
-bool Token::GetIsOperator() {
-  return IsOperator(token);
+// Повертає приорітет оператора
+int OperatorToken::GetPrecedence() {
+  switch (operator_) {
+    case '*':
+    case '/':
+      return 3;
+    case '+':
+    case '-':
+      return 2;
+    default:
+      throw invalid_argument("Отримано невідомий оператор");
+  }
 }
 
-int Token::GetPrecedence() {
-  if (token == "*" || token == "/")
-    return 3;
-  if (token == "+" || token == "-")
-    return 2;
-  return 0;
-}
-
-float Token::Calculate(float x, float y) {
-  if (GetIsOperator()) {
-    if (token == "+")
+// Обчислює результат бінарного оператора
+int OperatorToken::Calculate(int x, int y) {
+  switch (operator_) {
+    case '+':
       return x + y;
-    if (token == "-")
+    case '-':
       return x - y;
-    if (token == "*")
+    case '*':
       return x * y;
-    if (token == "/")
+    case '/':
       return x / y;
+    default:
+      throw invalid_argument("Отримано невідомий оператор");
   }
 }
