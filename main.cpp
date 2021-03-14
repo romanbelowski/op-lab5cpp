@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 
+#include "stack.hpp"
 #include "token.hpp"
 using namespace std;
 
@@ -24,10 +25,13 @@ int main(int argc, char* argv[]) {
   cout << OPERATORS << endl;
 
   OperatorToken plus = OperatorToken("+");
-  ValueToken five = ValueToken("5");
-  ValueToken ten = ValueToken("10");
-
-  cout << plus.Calculate(five, ten) << endl;
-
+  Stack golang;
+  golang.push(&plus);
+  golang.push(&plus);
+  golang.push(&plus);
+  golang.push(&plus);
+  golang.push(&plus);
+  golang.push(&plus);
+  cout << golang.pop() ->GetAsText()<< endl;
   return 0;
 }
