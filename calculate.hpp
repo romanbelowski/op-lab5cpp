@@ -1,5 +1,9 @@
-#include "stack.hpp"
 #include "queue.hpp"
 #include "token.hpp"
 
-Queue<Token*> ShuntingYard(Queue<Token*>&);
+// Обчислює вираз в інфіксній нотації
+float Calculate(Queue<Token *> &);
+
+// DEBUG
+Queue<Token *> ShuntingYard(Queue<Token *> &);
+float CalculateRPN(Queue<Token *> &);
