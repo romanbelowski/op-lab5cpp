@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
   cout << OPERATORS << endl;
 
   OperatorToken plus = OperatorToken("+");
-  Stack golang;
+  Stack<Token*> golang;
   golang.push(&plus);
   golang.push(&plus);
   golang.push(&plus);
