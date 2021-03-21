@@ -36,9 +36,7 @@ int OperatorToken::GetPrecedence() {
 }
 
 // Обчислює результат бінарного оператора
-float OperatorToken::Calculate(ValueToken a, ValueToken b) {
-  float x = a.GetValue(),
-        y = b.GetValue();
+float OperatorToken::Calculate(float x, float y) {
   switch (operator_) {
     case '+':
       return x + y;
@@ -59,6 +57,6 @@ string OperatorToken::GetAsText() {
 }
 
 // Вивести токен
-ostream& operator<<(ostream& os, Token& token) {
-  return os << token.GetAsText();
+ostream& operator<<(ostream& os, Token* token) {
+  return os << token->GetAsText();
 }

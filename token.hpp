@@ -9,11 +9,14 @@ class Token {
 
   virtual bool GetIsOperator() { return false; };
   virtual int GetPrecedence() { return 0; };
+  virtual float GetValue() { return 0; };
+  virtual float Calculate(float, float) { return 0; };
   virtual std::string GetAsText() { return "Token"; };
 };
 
 class ValueToken : public Token {
  public:
+  ValueToken(float token) : value_(token){};
   ValueToken(std::string token) : value_(stof(token)){};
   std::string GetAsText();
 
@@ -27,7 +30,7 @@ class ValueToken : public Token {
 class OperatorToken : public Token {
  public:
   OperatorToken(std::string token) : operator_(token[0]){};
-  float Calculate(ValueToken, ValueToken);
+  float Calculate(float, float);
   int GetPrecedence();
   std::string GetAsText();
 
@@ -37,4 +40,4 @@ class OperatorToken : public Token {
   char operator_;
 };
 
-std::ostream& operator<<(std::ostream& os, Token& token);
+std::ostream& operator<<(std::ostream& os, Token* token);
