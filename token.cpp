@@ -1,5 +1,6 @@
 #include "token.hpp"
 
+#include <sstream>
 #include <stdexcept>
 
 using namespace std;
@@ -13,8 +14,11 @@ bool Token::IsOperator(string str) {
   return false;
 }
 
-int ValueToken::GetValue() {
-  return value_;
+// Повертає значення як текст
+string ValueToken::GetAsText() {
+  ostringstream ss;
+  ss << value_;
+  return ss.str();
 }
 
 // Повертає приорітет оператора
@@ -32,9 +36,9 @@ int OperatorToken::GetPrecedence() {
 }
 
 // Обчислює результат бінарного оператора
-int OperatorToken::Calculate(ValueToken a, ValueToken b) {
-  int x = a.GetValue(),
-      y = b.GetValue();
+float OperatorToken::Calculate(ValueToken a, ValueToken b) {
+  float x = a.GetValue(),
+        y = b.GetValue();
   switch (operator_) {
     case '+':
       return x + y;
@@ -47,4 +51,14 @@ int OperatorToken::Calculate(ValueToken a, ValueToken b) {
     default:
       throw invalid_argument("Отримано невідомий оператор");
   }
+}
+
+// Повертає оператор як текст
+string OperatorToken::GetAsText() {
+  return string(1, operator_);
+}
+
+// Вивести токен
+ostream& operator<<(ostream& os, Token& token) {
+  return os << token.GetAsText();
 }

@@ -5,20 +5,20 @@ extern const std::string OPERATORS;
 
 class Token {
  public:
-  Token(){};
   static bool IsOperator(std::string str);
 
   virtual bool GetIsOperator() { return false; };
+  virtual int GetPrecedence() { return 0; };
   virtual std::string GetAsText() { return "Token"; };
 };
 
 class ValueToken : public Token {
  public:
-  ValueToken(std::string token) : value_(stoi(token)){};
-  int GetValue();
+  ValueToken(std::string token) : value_(stof(token)){};
+  std::string GetAsText();
 
+  float GetValue() { return value_; };
   bool GetIsOperator() { return false; };
-  std::string GetAsText() { return std::to_string(value_); };
 
  private:
   float value_;
@@ -27,12 +27,14 @@ class ValueToken : public Token {
 class OperatorToken : public Token {
  public:
   OperatorToken(std::string token) : operator_(token[0]){};
-  int Calculate(ValueToken, ValueToken);
+  float Calculate(ValueToken, ValueToken);
   int GetPrecedence();
+  std::string GetAsText();
 
   bool GetIsOperator() { return true; };
-  std::string GetAsText() { return std::string(1, operator_); };
 
  private:
   char operator_;
 };
+
+std::ostream& operator<<(std::ostream& os, Token& token);
