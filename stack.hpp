@@ -1,24 +1,25 @@
 #pragma once
-#include <string>
+#include <iostream>
 
 #include "token.hpp"
 
-template<typename T>
+template <typename T>
 class Stack {
  private:
   T* stack_;
   void doublesize();
   int top_;
   int size_;
-  void delete_stack(T* stack);
 
  public:
   void push(T);
   T pop();
   bool isempty();
-  Stack() {
+  void display();
+
+  Stack(int size) {
     top_ = -1;
-    size_ = 16;
+    size_ = size;
     stack_ = new T[size_];
   }
 
@@ -26,10 +27,9 @@ class Stack {
     delete[] stack_;
   }
 };
-//
 
 //  Подвоює розмір стаку
-template<typename T>
+template <typename T>
 void Stack<T>::doublesize() {
   T* new_stack = new T[size_ * 2];
   for (int i = 0; i < size_; i++) {
@@ -37,10 +37,11 @@ void Stack<T>::doublesize() {
   }
   delete[] stack_;
   stack_ = new_stack;
+  size_ = size_ * 2;
 }
 
 //  Додає елемент на вершину стаку
-template<typename T>
+template <typename T>
 void Stack<T>::push(T item) {
   if (top_ == size_ - 1) {
     //code
@@ -50,8 +51,9 @@ void Stack<T>::push(T item) {
     stack_[top_] = item;
   }
 }
+
 //  Видаляє елемент з вершини стаку
-template<typename T>
+template <typename T>
 T Stack<T>::pop() {
   T temp_;
   temp_ = stack_[top_];
@@ -60,7 +62,15 @@ T Stack<T>::pop() {
 }
 
 //  Перевіряє чи стак порожній
-template<typename T>
+template <typename T>
 bool Stack<T>::isempty() {
   return (top_ == -1);
+}
+
+//  Вивести всі елемнти стаку
+template <typename T>
+void Stack<T>::display() {
+  for (int i = 0; i <= top_; i++)
+    std::cout << stack_[i] << " ";
+  std::cout << std::endl;
 }
