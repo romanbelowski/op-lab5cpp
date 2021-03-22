@@ -3,41 +3,38 @@
 
 extern const std::string OPERATORS;
 
+// Тип токена
+enum TypeOfToken {
+  VALUE,
+  OPERATOR,
+  FUNCTION,
+  LEFT_PARANTHESIS,
+  RIGHT_PARANTHESIS,
+};
+
+// Асоціативність оператора
+enum Associativity {
+  LEFT,
+  RIGHT,
+};
+
 class Token {
- public:
-  static bool IsOperator(std::string str);
-
-  virtual bool GetIsOperator() { return false; };
-  virtual int GetPrecedence() { return 0; };
-  virtual float GetValue() { return 0; };
-  virtual float Calculate(float, float) { return 0; };
-  virtual std::string GetAsText() { return "Token"; };
-};
-
-class ValueToken : public Token {
- public:
-  ValueToken(float token) : value_(token){};
-  ValueToken(std::string token) : value_(stof(token)){};
-  std::string GetAsText();
-
-  float GetValue() { return value_; };
-  bool GetIsOperator() { return false; };
-
  private:
-  float value_;
-};
+  std::string token_;
+  TypeOfToken type_;
 
-class OperatorToken : public Token {
  public:
-  OperatorToken(std::string token) : operator_(token[0]){};
-  float Calculate(float, float);
-  int GetPrecedence();
-  std::string GetAsText();
+  static TypeOfToken GetType(std::string str);
+  Token() : token_("+"), type_(OPERATOR){};
+  Token(std::string token) : token_(token), type_(GetType(token)){};
 
-  bool GetIsOperator() { return true; };
+  TypeOfToken GetType();             // Повертає тип токена
+  float GetValue();                  // Повертає значення числа
+  int GetPrecedence();               // Повертає приорітет операції
+  Associativity GetAssociativity();  // Повертає асоціатиність операції
+  float Calculate(float, float);     // Обчислює результат бінарного оператора
 
- private:
-  char operator_;
+  friend std::ostream& operator<<(std::ostream& os, Token token);
 };
 
-std::ostream& operator<<(std::ostream& os, Token* token);
+std::ostream& operator<<(std::ostream& os, Token token);

@@ -3,13 +3,13 @@
 #include <iostream>
 #include <string>
 
-// #include "calculate.hpp"
+#include "calculate.hpp"
 #include "queue.hpp"
 #include "token.hpp"
 
 using namespace std;
 
-Queue<Token> SplitExpression(string);
+Queue<Token> SplitExpression(string);  // Роздляє рядок на чергу токенів
 
 int main(int argc, char* argv[]) {
   string expression = argv[1];
@@ -17,8 +17,8 @@ int main(int argc, char* argv[]) {
 
   queue.display();
 
-  // Queue<Token*> res = ShuntingYard(queue);
-  // res.display();
+  Queue<Token> res = ShuntingYard(queue);
+  res.display();
 
   // cout << CalculateRPN(res) << endl;
 
