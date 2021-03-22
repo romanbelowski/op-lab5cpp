@@ -44,8 +44,7 @@ void Stack<T>::doublesize() {
 template <typename T>
 void Stack<T>::push(T item) {
   if (top_ == size_ - 1) {
-    //code
-
+    doublesize();
   } else {
     top_ = top_ + 1;
     stack_[top_] = item;
