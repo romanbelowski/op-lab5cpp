@@ -1,5 +1,6 @@
 #include "token.hpp"
 
+#include <cmath>
 #include <sstream>
 #include <stdexcept>
 
@@ -14,6 +15,7 @@ bool Token::IsOperator(string str) {
   return false;
 }
 
+// Повертає асоціативність
 // Повертає значення як текст
 string ValueToken::GetAsText() {
   ostringstream ss;
@@ -24,6 +26,8 @@ string ValueToken::GetAsText() {
 // Повертає приорітет оператора
 int OperatorToken::GetPrecedence() {
   switch (operator_) {
+    case '^':
+      return 4;
     case '*':
     case '/':
       return 3;
@@ -46,6 +50,8 @@ float OperatorToken::Calculate(float x, float y) {
       return x * y;
     case '/':
       return x / y;
+    case '^':
+      return pow(x, y);
     default:
       throw invalid_argument("Отримано невідомий оператор");
   }
