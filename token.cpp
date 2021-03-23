@@ -53,6 +53,8 @@ int Token::GetPrecedence() {
         return 3;
       if (token_ == "+" || token_ == "-")
         return 2;
+      if (token_ == "^")
+        return 4;
       break;
     case PREFIX_OPERATOR:
       if (token_ == "-")
