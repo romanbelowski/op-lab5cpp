@@ -47,10 +47,9 @@ template <typename T>
 void Stack<T>::push(T item) {
   if (top_ == size_ - 1) {
     doublesize();
-  } else {
-    top_ = top_ + 1;
-    stack_[top_] = item;
   }
+  top_ = top_ + 1;
+  stack_[top_] = item;
 }
 
 //  Видаляє елемент з вершини стаку
@@ -65,7 +64,6 @@ T Stack<T>::pop() {
 //  Бере елемент з вершини стаку
 template <typename T>
 T Stack<T>::top() {
-
   return (stack_[top_]);
 }
 
