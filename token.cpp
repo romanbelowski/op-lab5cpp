@@ -6,18 +6,20 @@
 
 using namespace std;
 
-const string OPERATORS = "+-*/^()";
+const string TOKENS = "+-*/^()";
+const string INFIX_OPERATORS = "+-*/^";
+const string PREFIX_OPERATORS = "-";
 
-// Перевіряє чи символ є оператором
-bool IsOperator(string str) {
-  if (str != "" && OPERATORS.find(str) != string::npos)
+// Перевіряє чи символ є деяким типом операторів
+bool IsSubOperator(string str, string tokens) {
+  if (str != "" && tokens.find(str) != string::npos)
     return true;
   return false;
 }
 
 // Повертає тип токена
 TypeOfToken Token::GetType(string token) {
-  if (IsOperator(token))
+  if (IsSubOperator(token, INFIX_OPERATORS))
     return INFIX_OPERATOR;
   if (token == "(")
     return LEFT_PARANTHESIS;
