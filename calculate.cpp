@@ -23,7 +23,7 @@ Queue<Token> ShuntingYard(Queue<Token> &infix) {
       case OPERATOR:
         while (!operators.isempty()) {
           Token op = operators.pop();
-          if (op.GetPrecedence() >= token.GetPrecedence()) {
+          if ((op.GetPrecedence() > token.GetPrecedence()) || ((op.GetPrecedence() == token.GetPrecedence()) && token.GetAssociativity() == LEFT))  {
             postfix.enqueue(op);
           } else {
             operators.push(op);  // Повертає оператор назад в стак
