@@ -18,7 +18,7 @@ bool IsOperator(string str) {
 // Повертає тип токена
 TypeOfToken Token::GetType(string token) {
   if (IsOperator(token))
-    return OPERATOR;
+    return INFIX_OPERATOR;
   if (token == "(")
     return LEFT_PARANTHESIS;
   if (token == ")")
@@ -31,37 +31,58 @@ TypeOfToken Token::GetType() {
   return type_;
 }
 
+// Встановлює тип токена
+void Token::SetType(TypeOfToken type) {
+  type_ = type;
+}
+
 // Повертає значення числа
 float Token::GetValue() {
   if (type_ != VALUE)
-    throw invalid_argument("Спроба отримати значення не з VALUE");
+    throw invalid_argument("Спроба отримати значення не зі значення");
   return stof(token_);
 }
 
 // Повертає приорітет оператора
 int Token::GetPrecedence() {
-  if (type_ != OPERATOR)
-    throw invalid_argument("Спроба отримати приорітет не з OPERATOR");
-  if (token_ == "*" || token_ == "/")
-    return 3;
-  if (token_ == "+" || token_ == "-")
-    return 2;
+  switch (type_) {
+    case INFIX_OPERATOR:
+      if (token_ == "*" || token_ == "/")
+        return 3;
+      if (token_ == "+" || token_ == "-")
+        return 2;
+      break;
+    case PREFIX_OPERATOR:
+      if (token_ == "-")
+        return 3;
+      break;
+    default:
+      throw invalid_argument("Спроба отримати приорітет не з оператора");
+  }
 }
 
 // Повертає асоціативність оператора
 Associativity Token::GetAssociativity() {
-  if (type_ != OPERATOR)
-    throw invalid_argument("Спроба отримати асоціативність не з OPERATOR");
-  if (token_ == "*" || token_ == "/" || token_ == "+" || token_ == "-")
-    return LEFT;
-  if (token_ == "^")
-    return RIGHT;
+  switch (type_) {
+    case INFIX_OPERATOR:
+      if (token_ == "*" || token_ == "/" || token_ == "+" || token_ == "-")
+        return LEFT;
+      if (token_ == "^")
+        return RIGHT;
+      break;
+    case PREFIX_OPERATOR:
+      if (token_ == "-")
+        return RIGHT;
+      break;
+    default:
+      throw invalid_argument("Спроба отримати асоціативність не з оператора");
+  }
 }
 
 // Обчислює результат бінарного оператора
 float Token::Calculate(float x, float y) {
-  if (type_ != OPERATOR)
-    throw invalid_argument("Спроба отримати результат не з OPERATOR");
+  if (type_ != INFIX_OPERATOR)
+    throw invalid_argument("Спроба отримати результат не з оператора");
   if (token_ == "+")
     return x + y;
   if (token_ == "-")
@@ -72,6 +93,18 @@ float Token::Calculate(float x, float y) {
     return x / y;
   if (token_ == "^")
     return pow(x, y);
+}
+
+// Обчислює результат унарного оператора
+float Token::Calculate(float x) {
+  switch (type_) {
+    case PREFIX_OPERATOR:
+      if (token_ == "-")
+        return -x;
+      break;
+    default:
+      throw invalid_argument("Спроба отримати результат не з оператора");
+  }
 }
 
 // Вивести токен
