@@ -11,15 +11,16 @@ Queue<Token> SplitExpression(string);  // Роздляє рядок на чер�
 
 int main(int argc, char* argv[]) {
   string expression = argv[1];
-  // string expression = "11+2*3 -(6/2)";
   Queue<Token> queue = SplitExpression(expression);
 
+  cout << "Інфіксна нотація:" << endl;
   queue.display();
 
   Queue<Token> res = ShuntingYard(queue);
+  cout << "Обернена польска нотація:" << endl;
   res.display();
 
-  //  cout << CalculateRPN(res) << endl;
+  cout << "Результат: " << CalculateRPN(res) << endl;
 
   return 0;
 }

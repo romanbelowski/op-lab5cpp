@@ -82,14 +82,20 @@ float CalculateRPN(Queue<Token> &tokens) {
     Token token = tokens.dequeue();
     TypeOfToken type = token.GetType();
 
-    if (type == VALUE) {
-      result = token.GetValue();
-    } else if (type == INFIX_OPERATOR) {
-      y = values.pop();
-      x = values.pop();
-      result = token.Calculate(x, y);
+    switch (type) {
+      case VALUE:
+        result = token.GetValue();
+        break;
+      case INFIX_OPERATOR:
+        y = values.pop();
+        x = values.pop();
+        result = token.Calculate(x, y);
+        break;
+      case PREFIX_OPERATOR:
+        x = values.pop();
+        result = token.Calculate(x);
+        break;
     }
-
     values.push(result);
   }
   return values.pop();
