@@ -64,18 +64,6 @@ Queue<Token> ShuntingYard(Queue<Token> &infix) {
           state = WANT_OPERAND;
         }
         break;
-      case LEFT_PARANTHESIS:
-        operators.push(token);
-        break;
-      case RIGHT_PARANTHESIS:
-        while (operators.top().GetType() != LEFT_PARANTHESIS) {
-          Token op = operators.pop();
-          postfix.enqueue(op);
-        }
-        if (operators.top().GetType() == LEFT_PARANTHESIS) {
-          operators.pop();
-        }
-        break;
     }
   }
 
