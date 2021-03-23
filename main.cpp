@@ -11,15 +11,16 @@ Queue<Token> SplitExpression(string);  // Роздляє рядок на чер�
 
 int main(int argc, char* argv[]) {
   string expression = argv[1];
-  //string expression = "(2+3)/5";
   Queue<Token> queue = SplitExpression(expression);
 
+  cout << "Infix notation" << endl;
   queue.display();
 
   Queue<Token> res = ShuntingYard(queue);
+  cout << "Reverse polish notacion:" << endl;
   res.display();
 
-   cout << CalculateRPN(res) << endl;
+  cout << "Result: " << CalculateRPN(res) << endl;
 
   return 0;
 }
