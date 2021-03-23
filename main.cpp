@@ -13,14 +13,14 @@ int main(int argc, char* argv[]) {
   string expression = argv[1];
   Queue<Token> queue = SplitExpression(expression);
 
-  cout << "Інфіксна нотація:" << endl;
+  cout << "Infix notation" << endl;
   queue.display();
 
   Queue<Token> res = ShuntingYard(queue);
-  cout << "Обернена польска нотація:" << endl;
+  cout << "Reverse polish notacion:" << endl;
   res.display();
 
-  cout << "Результат: " << CalculateRPN(res) << endl;
+  cout << "Result: " << CalculateRPN(res) << endl;
 
   return 0;
 }
