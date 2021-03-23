@@ -10,8 +10,8 @@ using namespace std;
 Queue<Token> SplitExpression(string);  // Роздляє рядок на чергу токенів
 
 int main(int argc, char* argv[]) {
-  string expression = argv[1];
-  //string expression = "2+3+4";
+  //string expression = argv[1];
+  string expression = "(2+3)/5";
   Queue<Token> queue = SplitExpression(expression);
 
   queue.display();
@@ -35,7 +35,7 @@ void RemoveSpaces(string& str) {
 
 // Повертає позицію і розмір наступного оператора
 size_t next_op(string str, size_t start_pos, size_t* size) {
-  size_t operator_pos = str.find_first_of(OPERATORS, start_pos),
+  size_t operator_pos = str.find_first_of(TOKENS, start_pos),
          function_pos = str.find("sqrt", start_pos),
          result_pos = min(operator_pos, function_pos);
 

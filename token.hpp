@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-extern const std::string OPERATORS;
+extern const std::string TOKENS;
 
 // Тип токена
 enum TypeOfToken {
