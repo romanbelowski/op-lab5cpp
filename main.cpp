@@ -10,8 +10,8 @@ using namespace std;
 Queue<Token> SplitExpression(string);  // Роздляє рядок на чергу токенів
 
 int main(int argc, char* argv[]) {
-  //string expression = argv[1];
-  string expression = "(2+3)/5";
+  string expression = argv[1];
+  //string expression = "(2+3)/5";
   Queue<Token> queue = SplitExpression(expression);
 
   queue.display();

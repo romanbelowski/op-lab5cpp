@@ -23,7 +23,7 @@ Queue<Token> ShuntingYard(Queue<Token> &infix) {
       case OPERATOR:
         while (!operators.isempty()) {
           Token op = operators.pop();
-          if ((op.GetPrecedence() > token.GetPrecedence()) || ((op.GetPrecedence() == token.GetPrecedence()) && token.GetAssociativity() == LEFT))  {
+          if ((op.GetType()!= LEFT_PARANTHESIS) && ((op.GetPrecedence() > token.GetPrecedence()) || ((op.GetPrecedence() == token.GetPrecedence()) && token.GetAssociativity() == LEFT))) {
             postfix.enqueue(op);
           } else {
             operators.push(op);  // Повертає оператор назад в стак
@@ -31,6 +31,18 @@ Queue<Token> ShuntingYard(Queue<Token> &infix) {
           }
         }
         operators.push(token);
+        break;
+      case LEFT_PARANTHESIS:
+        operators.push(token);
+        break;
+      case RIGHT_PARANTHESIS:
+        while (operators.top().GetType() != LEFT_PARANTHESIS) {
+          Token op = operators.pop();
+          postfix.enqueue(op);
+        }
+        if (operators.top().GetType() == LEFT_PARANTHESIS) {
+          operators.pop();
+        }
         break;
     }
   }

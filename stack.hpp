@@ -14,6 +14,8 @@ class Stack {
  public:
   void push(T);
   T pop();
+  T top();
+
   bool isempty();
   void display();
 
@@ -58,6 +60,13 @@ T Stack<T>::pop() {
   temp_ = stack_[top_];
   top_ = top_ - 1;
   return (temp_);
+}
+
+//  Бере елемент з вершини стаку
+template <typename T>
+T Stack<T>::top() {
+
+  return (stack_[top_]);
 }
 
 //  Перевіряє чи стак порожній
