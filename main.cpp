@@ -7,17 +7,18 @@
 
 using namespace std;
 
-Queue<Token*> SplitExpression(string);  // Роздляє рядок на чергу токенів
+Queue<Token> SplitExpression(string);  // Роздляє рядок на чергу токенів
 
 int main(int argc, char* argv[]) {
   string expression = argv[1];
-  Queue<Token*> infix = SplitExpression(expression);
-  infix.display();
+  Queue<Token> queue = SplitExpression(expression);
 
-  Queue<Token*> postfix = ShuntingYard(infix);
-  postfix.display();
+  queue.display();
 
-  cout << CalculateRPN(postfix) << endl;
+  Queue<Token> res = ShuntingYard(queue);
+  res.display();
+
+  // cout << CalculateRPN(res) << endl;
 
   return 0;
 }
@@ -34,8 +35,8 @@ void RemoveSpaces(string& str) {
 // Повертає позицію і розмір наступного оператора
 size_t next_op(string str, size_t start_pos, size_t* size) {
   size_t operator_pos = str.find_first_of(OPERATORS, start_pos),
-         function_pos = string::npos,  // TODO: add functions
-      result_pos = min(operator_pos, function_pos);
+         function_pos = str.find("sqrt", start_pos),
+         result_pos = min(operator_pos, function_pos);
 
   if (result_pos == string::npos) {
     *size = string::npos;
@@ -48,21 +49,21 @@ size_t next_op(string str, size_t start_pos, size_t* size) {
 }
 
 // Роздляє рядок на чергу токенів
-Queue<Token*> SplitExpression(string str) {
+Queue<Token> SplitExpression(string str) {
   RemoveSpaces(str);
-  Queue<Token*> out(16);
+  Queue<Token> out(16);
   string token;
   size_t start_pos = 0, op_size, op_pos = next_op(str, start_pos, &op_size);
   while (op_pos != string::npos) {
     // Число між операторами
     if (start_pos < op_pos) {
       token = str.substr(start_pos, op_pos - start_pos);
-      out.enqueue(new ValueToken(token));
+      out.enqueue(Token(token));
     }
 
     // Оператор
     token = str.substr(op_pos, op_size);
-    out.enqueue(new OperatorToken(token));
+    out.enqueue(Token(token));
 
     start_pos = op_pos + op_size;
     op_pos = next_op(str, start_pos, &op_size);
@@ -71,7 +72,7 @@ Queue<Token*> SplitExpression(string str) {
   // Число в кінці
   if (start_pos < str.size()) {
     token = str.substr(start_pos, string::npos);
-    out.enqueue(new ValueToken(token));
+    out.enqueue(Token(token));
   }
 
   return out;

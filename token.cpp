@@ -1,62 +1,80 @@
 #include "token.hpp"
 
+#include <cmath>
 #include <sstream>
 #include <stdexcept>
 
 using namespace std;
 
-const string OPERATORS = "+-*/";
+const string OPERATORS = "+-*/^()";
 
 // Перевіряє чи символ є оператором
-bool Token::IsOperator(string str) {
-  if (OPERATORS.find(str) != string::npos)
+bool IsOperator(string str) {
+  if (str != "" && OPERATORS.find(str) != string::npos)
     return true;
   return false;
 }
 
-// Повертає значення як текст
-string ValueToken::GetAsText() {
-  ostringstream ss;
-  ss << value_;
-  return ss.str();
+// Повертає тип токена
+TypeOfToken Token::GetType(string token) {
+  if (IsOperator(token))
+    return OPERATOR;
+  if (token == "(")
+    return LEFT_PARANTHESIS;
+  if (token == ")")
+    return RIGHT_PARANTHESIS;
+  return VALUE;
+}
+
+// Повертає тип токена
+TypeOfToken Token::GetType() {
+  return type_;
+}
+
+// Повертає значення числа
+float Token::GetValue() {
+  if (type_ != VALUE)
+    throw invalid_argument("Спроба отримати значення не з VALUE");
+  return stof(token_);
 }
 
 // Повертає приорітет оператора
-int OperatorToken::GetPrecedence() {
-  switch (operator_) {
-    case '*':
-    case '/':
-      return 3;
-    case '+':
-    case '-':
-      return 2;
-    default:
-      throw invalid_argument("Отримано невідомий оператор");
-  }
+int Token::GetPrecedence() {
+  if (type_ != OPERATOR)
+    throw invalid_argument("Спроба отримати приорітет не з OPERATOR");
+  if (token_ == "*" || token_ == "/")
+    return 3;
+  if (token_ == "+" || token_ == "-")
+    return 2;
+}
+
+// Повертає асоціативність оператора
+Associativity Token::GetAssociativity() {
+  if (type_ != OPERATOR)
+    throw invalid_argument("Спроба отримати асоціативність не з OPERATOR");
+  if (token_ == "*" || token_ == "/" || token_ == "+" || token_ == "-")
+    return LEFT;
+  if (token_ == "^")
+    return RIGHT;
 }
 
 // Обчислює результат бінарного оператора
-float OperatorToken::Calculate(float x, float y) {
-  switch (operator_) {
-    case '+':
-      return x + y;
-    case '-':
-      return x - y;
-    case '*':
-      return x * y;
-    case '/':
-      return x / y;
-    default:
-      throw invalid_argument("Отримано невідомий оператор");
-  }
-}
-
-// Повертає оператор як текст
-string OperatorToken::GetAsText() {
-  return string(1, operator_);
+float Token::Calculate(float x, float y) {
+  if (type_ != OPERATOR)
+    throw invalid_argument("Спроба отримати результат не з OPERATOR");
+  if (token_ == "+")
+    return x + y;
+  if (token_ == "-")
+    return x - y;
+  if (token_ == "*")
+    return x * y;
+  if (token_ == "/")
+    return x / y;
+  if (token_ == "^")
+    return pow(x, y);
 }
 
 // Вивести токен
-ostream& operator<<(ostream& os, Token* token) {
-  return os << token->GetAsText();
+ostream& operator<<(ostream& os, Token token) {
+  return os << token.token_;
 }
