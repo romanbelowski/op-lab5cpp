@@ -11,6 +11,7 @@ Queue<Token> SplitExpression(string);  // Роздляє рядок на чер�
 
 int main(int argc, char* argv[]) {
   string expression = argv[1];
+  //string expression = "2+3+4";
   Queue<Token> queue = SplitExpression(expression);
 
   queue.display();
@@ -18,7 +19,7 @@ int main(int argc, char* argv[]) {
   Queue<Token> res = ShuntingYard(queue);
   res.display();
 
-  // cout << CalculateRPN(res) << endl;
+   cout << CalculateRPN(res) << endl;
 
   return 0;
 }

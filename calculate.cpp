@@ -30,6 +30,7 @@ Queue<Token> ShuntingYard(Queue<Token> &infix) {
             break;
           }
         }
+        operators.push(token);
         break;
     }
   }
