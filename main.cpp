@@ -11,6 +11,7 @@ Queue<Token> SplitExpression(string);  // Роздляє рядок на чер�
 
 int main(int argc, char* argv[]) {
   string expression = argv[1];
+  // string expression = "(2+2)* 4";
   Queue<Token> queue = SplitExpression(expression);
 
   cout << "Infix notation:" << endl;
@@ -44,12 +45,9 @@ Queue<Token> SplitExpression(string str) {
   RemoveSpaces(str);
   Queue<Token> out(16);
   string token;
-  size_t start_pos, token_pos = 0;
+  size_t start_pos = 0, token_pos = next_token_pos(str, 0);
 
-  do {
-    start_pos = token_pos;
-    token_pos = next_token_pos(str, start_pos);
-
+  while (token_pos != string::npos) {
     if (next_token_pos(str, start_pos) == start_pos) {
       // Токен - оператор
       token = str.substr(token_pos++, 1);
@@ -59,7 +57,9 @@ Queue<Token> SplitExpression(string str) {
       token = str.substr(start_pos, token_pos - start_pos);
       out.enqueue(Token(token));
     }
-  } while (token_pos != string::npos);
+    start_pos = token_pos;
+    token_pos = next_token_pos(str, start_pos);
+  }
 
   if (start_pos < str.size()) {
     // Токен - значення в кінці
