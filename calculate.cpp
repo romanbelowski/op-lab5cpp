@@ -42,12 +42,18 @@ Queue<Token> ShuntingYard(Queue<Token> &infix) {
           state = HAVE_OPERAND;
         }
         if (type == RIGHT_PARANTHESIS) {
-          Token op = operators.pop();
-          while (op.GetType() != LEFT_PARANTHESIS) {
-            postfix.enqueue(op);
-            op = operators.pop();
+          if (operators.isempty()) {
+            cerr << "Mismatched parentheses" << endl;
+            exit(1);
           }
-          // if the '(' is marked infix, add a "call" operator to the output queue (*)
+          while (operators.top().GetType() != LEFT_PARANTHESIS) {
+            if (operators.isempty()) {
+              cerr << "Mismatched parentheses" << endl;
+              exit(1);
+            }
+            postfix.enqueue(operators.pop());
+          }
+          operators.pop();  // Видаляэмо ліву дужку
           state = HAVE_OPERAND;
         }
         if (type == INFIX_OPERATOR) {
@@ -68,6 +74,10 @@ Queue<Token> ShuntingYard(Queue<Token> &infix) {
   }
 
   while (!operators.isempty()) {
+    if (operators.top().GetType() == LEFT_PARANTHESIS || operators.top().GetType() == RIGHT_PARANTHESIS) {
+      cerr << "Mismatched parentheses" << endl;
+      exit(1);
+    }
     postfix.enqueue(operators.pop());
   }
   return postfix;
