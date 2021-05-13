@@ -1,66 +1,50 @@
 #include "calculate.hpp"
 
-#include "stack.hpp"
-
-using namespace std;
-
-float Calculate(Queue<Token> &tokens) {
-  Queue<Token> postfix = ShuntingYard(tokens);
-  return CalculateRPN(postfix);
-}
-
-enum StateShuntingYard {
+enum State {
   WANT_OPERAND,
   HAVE_OPERAND,
 };
 
 // Перетворює вираз з інфіксної нотації в постфіксну
-Queue<Token> ShuntingYard(Queue<Token> &infix) {
-  StateShuntingYard state = WANT_OPERAND;
-  Queue<Token> postfix(16);
-  Stack<Token> operators(16);
+// Перетворює вираз з інфіксної нотації в постфіксну
+std::queue<Token> Infix2Postix(std::queue<Token> infix) {
+  State state = WANT_OPERAND;
+  std::queue<Token> postfix;
+  std::stack<Token> operators;
 
-  while (!infix.isempty()) {
-    Token token = infix.dequeue();
+  while (!infix.empty()) {
+    Token token = infix.front();
     TypeOfToken type = token.GetType();
     switch (state) {
       case WANT_OPERAND:
         if (type == VALUE) {
-          postfix.enqueue(token);
+          postfix.push(token);
           state = HAVE_OPERAND;
         }
-        if (type == INFIX_OPERATOR || type == LEFT_PARANTHESIS) {
-          if (type == INFIX_OPERATOR)
-            token.SetType(PREFIX_OPERATOR);
+        if (type == BINARY_OPERATOR) {
+          type = UNARY_OPERATOR;
+          token.SetType(UNARY_OPERATOR);
+        }
+        if (type == UNARY_OPERATOR || type == LEFT_PARANTHESIS) {
           operators.push(token);
           state = WANT_OPERAND;
         }
         break;
       case HAVE_OPERAND:
-        if (type == POSTFIX_OPERATOR) {
-          postfix.enqueue(token);
-          state = HAVE_OPERAND;
-        }
         if (type == RIGHT_PARANTHESIS) {
-          if (operators.isempty()) {
-            cerr << "Mismatched parentheses" << endl;
-            exit(1);
-          }
           while (operators.top().GetType() != LEFT_PARANTHESIS) {
-            if (operators.isempty()) {
-              cerr << "Mismatched parentheses" << endl;
-              exit(1);
-            }
-            postfix.enqueue(operators.pop());
+            postfix.push(operators.top());
+            operators.pop();
           }
           operators.pop();  // Видаляэмо ліву дужку
           state = HAVE_OPERAND;
         }
-        if (type == INFIX_OPERATOR) {
-          while (!operators.isempty()) {
-            Token op = operators.pop();
+        if (type == BINARY_OPERATOR) {
+          while (!operators.empty()) {
+            Token op = operators.top();
+            operators.pop();
             if ((op.GetType() != LEFT_PARANTHESIS) && ((op.GetPrecedence() > token.GetPrecedence()) || ((op.GetPrecedence() == token.GetPrecedence()) && (token.GetAssociativity() == LEFT)))) {
-              postfix.enqueue(op);
+              postfix.push(op);
             } else {
               operators.push(op);  // Повертає оператор назад в стак
               break;
@@ -71,42 +55,12 @@ Queue<Token> ShuntingYard(Queue<Token> &infix) {
         }
         break;
     }
+    infix.pop();
   }
 
-  while (!operators.isempty()) {
-    if (operators.top().GetType() == LEFT_PARANTHESIS || operators.top().GetType() == RIGHT_PARANTHESIS) {
-      cerr << "Mismatched parentheses" << endl;
-      exit(1);
-    }
-    postfix.enqueue(operators.pop());
+  while (!operators.empty()) {
+    postfix.push(operators.top());
+    operators.pop();
   }
   return postfix;
-}
-
-// Обчислює вираз заданий в постфіксній нотації
-float CalculateRPN(Queue<Token> &tokens) {
-  Stack<float> values(16);
-  float result, x, y;
-
-  while (!tokens.isempty()) {
-    Token token = tokens.dequeue();
-    TypeOfToken type = token.GetType();
-
-    switch (type) {
-      case VALUE:
-        result = token.GetValue();
-        break;
-      case INFIX_OPERATOR:
-        y = values.pop();
-        x = values.pop();
-        result = token.Calculate(x, y);
-        break;
-      case PREFIX_OPERATOR:
-        x = values.pop();
-        result = token.Calculate(x);
-        break;
-    }
-    values.push(result);
-  }
-  return values.pop();
 }

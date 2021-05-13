@@ -1,9 +1,10 @@
-#include "queue.hpp"
+#pragma once
+#include <queue>
+#include <stack>
+#include <stdexcept>
+#include <string>
+
 #include "token.hpp"
 
-// Обчислює вираз в інфіксній нотації
-float Calculate(Queue<Token> &);
-
-// DEBUG
-Queue<Token> ShuntingYard(Queue<Token> &);
-float CalculateRPN(Queue<Token> &);
+// Shunting Yard
+std::queue<Token> Infix2Postix(std::queue<Token> infix);

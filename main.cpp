@@ -7,21 +7,24 @@
 
 using namespace std;
 
-Queue<Token> SplitExpression(string);  // Роздляє рядок на чергу токенів
+std::queue<Token> SplitExpression(std::string str);  // Роздляє рядок на чергу токенів
+
+void print_queue(std::queue<Token> q) {
+  while (!q.empty()) {
+    std::cout << q.front() << " ";
+    q.pop();
+  }
+  std::cout << std::endl;
+}
 
 int main(int argc, char* argv[]) {
-  string expression = argv[1];
-  // string expression = "(2+2)* 4";
-  Queue<Token> queue = SplitExpression(expression);
+  // string expression = argv[1];
+  string expression = "(2+2)* 4";
+  std::queue<Token> queue = SplitExpression(expression);
 
-  cout << "Infix notation:" << endl;
-  queue.display();
-
-  Queue<Token> res = ShuntingYard(queue);
+  std::queue<Token> res = Infix2Postix(queue);
   cout << "Reverse polish notation:" << endl;
-  res.display();
-
-  cout << "Result: " << CalculateRPN(res) << endl;
+  print_queue(res);
 
   return 0;
 }
@@ -41,31 +44,26 @@ inline size_t next_token_pos(string str, size_t start_pos) {
 }
 
 // Роздляє рядок на чергу токенів
-Queue<Token> SplitExpression(string str) {
-  RemoveSpaces(str);
-  Queue<Token> out(16);
-  string token;
+std::queue<Token> SplitExpression(std::string str) {
+  std::queue<Token> result;
+  std::string token;
   size_t start_pos = 0, token_pos = next_token_pos(str, 0);
 
-  while (token_pos != string::npos) {
+  while (token_pos != std::string::npos) {
     if (next_token_pos(str, start_pos) == start_pos) {
-      // Токен - оператор
-      token = str.substr(token_pos++, 1);
-      out.enqueue(Token(token));
+      token = str.substr(token_pos++, 1);  // Токен - оператор
     } else {
-      // Токен - значення між двома операторами
-      token = str.substr(start_pos, token_pos - start_pos);
-      out.enqueue(Token(token));
+      token = str.substr(start_pos, token_pos - start_pos);  // Токен - значення між двома операторами
     }
+    result.push(Token(token));
     start_pos = token_pos;
     token_pos = next_token_pos(str, start_pos);
   }
-
+  // Токен - значення в кінці
   if (start_pos < str.size()) {
-    // Токен - значення в кінці
-    token = str.substr(start_pos, string::npos);
-    out.enqueue(Token(token));
+    token = str.substr(start_pos, std::string::npos);
+    result.push(Token(token));
   }
 
-  return out;
+  return result;
 }
