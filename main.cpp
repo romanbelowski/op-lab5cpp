@@ -1,8 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "calculate.hpp"
-#include "queue.hpp"
+#include "shunting-yard.hpp"
 #include "token.hpp"
 
 using namespace std;
@@ -20,9 +19,10 @@ void print_queue(std::queue<Token> q) {
 int main(int argc, char* argv[]) {
   // string expression = argv[1];
   string expression = "(2+2)* 4";
+  ShuntingYard yard = ShuntingYard();
   std::queue<Token> queue = SplitExpression(expression);
 
-  std::queue<Token> res = Infix2Postix(queue);
+  std::queue<Token> res = yard.Infix2Postix(queue);
   cout << "Reverse polish notation:" << endl;
   print_queue(res);
 

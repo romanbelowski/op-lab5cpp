@@ -1,13 +1,7 @@
-#include "calculate.hpp"
-
-enum State {
-  WANT_OPERAND,
-  HAVE_OPERAND,
-};
+#include "shunting-yard.hpp"
 
 // Перетворює вираз з інфіксної нотації в постфіксну
-// Перетворює вираз з інфіксної нотації в постфіксну
-std::queue<Token> Infix2Postix(std::queue<Token> infix) {
+std::queue<Token> ShuntingYard::Infix2Postix(std::queue<Token>& infix) {
   State state = WANT_OPERAND;
   std::queue<Token> postfix;
   std::stack<Token> operators;
