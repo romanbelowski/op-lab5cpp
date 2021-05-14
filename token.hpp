@@ -7,10 +7,8 @@ extern const std::string TOKENS;
 enum TypeOfToken {
   NONE,
   VALUE,
-  FUNCTION,
-  INFIX_OPERATOR,     // Бінарний оператор, типу +, *
-  PREFIX_OPERATOR,    // Унарний оператор, типу -
-  POSTFIX_OPERATOR,   // Унарний оператор, типу !
+  UNARY_OPERATOR,     // Унарний оператор: -69
+  BINARY_OPERATOR,    // Бінарний оператор: 1 + 1
   LEFT_PARANTHESIS,   // (
   RIGHT_PARANTHESIS,  // )
 };
@@ -33,13 +31,8 @@ class Token {
 
   TypeOfToken GetType();             // Повертає тип токена
   void SetType(TypeOfToken);         // Встановлює тип токена
-  float GetValue();                  // Повертає значення числа
   int GetPrecedence();               // Повертає приорітет операції
   Associativity GetAssociativity();  // Повертає асоціатиність операції
-  float Calculate(float, float);     // Обчислює результат бінарного оператора
-  float Calculate(float);            // Обчислює результат унарного оператора
 
   friend std::ostream& operator<<(std::ostream& os, Token token);
 };
-
-std::ostream& operator<<(std::ostream& os, Token token);
