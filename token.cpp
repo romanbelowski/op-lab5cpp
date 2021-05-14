@@ -9,15 +9,8 @@ using namespace std;
 const std::string BINARY_OPERATORS = "+-*/^=";
 const std::string TOKENS = BINARY_OPERATORS + "()";
 
-// Перевіряє чи символ є деяким типом операторів
-bool IsSubOperator(string str, string tokens) {
-  if (str != "" && tokens.find(str) != string::npos)
-    return true;
-  return false;
-}
-
 // Повертає тип токена
-TypeOfToken Token::GetType(std::string token) {
+Type Token::GetType(std::string token) {
   if (BINARY_OPERATORS.find(token) != std::string::npos)
     return BINARY_OPERATOR;
   if (token == "(")
@@ -27,22 +20,14 @@ TypeOfToken Token::GetType(std::string token) {
   return VALUE;
 }
 
-// Повертає тип токена
-TypeOfToken Token::GetType() {
-  return type_;
-}
-
-// Встановлює тип токена
-void Token::SetType(TypeOfToken type) {
-  type_ = type;
-}
-
 // Повертає приорітет оператора
 int Token::GetPrecedence() {
-  if (token_ == "*" || token_ == "/")
-    return 3;
+  if (token_ == "=")
+    return 1;
   if (token_ == "+" || token_ == "-")
     return 2;
+  if (token_ == "*" || token_ == "/")
+    return 3;
   if (token_ == "^")
     return 4;
   throw invalid_argument("Спроба отримати приорітет не з оператора");
