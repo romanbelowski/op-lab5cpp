@@ -38,7 +38,7 @@ std::queue<Token> ShuntingYard::Infix2Postix(std::queue<Token>& infix) {
 
   while (!infix.empty()) {
     Token token = infix.front();
-    TypeOfToken type = token.GetType();
+    Type type = token.GetType();
     switch (state) {
       case WANT_OPERAND:
         if (type == VALUE) {
