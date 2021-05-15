@@ -10,7 +10,7 @@
 #include "shunting-yard.hpp"
 #include "token.hpp"
 
-std::map<std::string, float> VARIABLES;
+extern std::map<std::string, float> VARIABLES;
 
 class Node {
  public:
