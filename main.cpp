@@ -17,6 +17,7 @@ int main(int argc, char* argv[]) {
   // string expression = argv[1];
 
   Tree* AST = Builder().BuildTree("math.txt");
+  AST->print(0);
   float result = AST->evaluate();
   std::cout << "result = " << result << std::endl;
 

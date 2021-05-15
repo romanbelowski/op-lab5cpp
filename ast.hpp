@@ -16,6 +16,7 @@ class Node {
  public:
   Node(){};
   virtual float evaluate() = 0;
+  virtual void print(int depth) = 0;
 };
 
 class NumberNode : public Node {
@@ -25,7 +26,8 @@ class NumberNode : public Node {
  public:
   NumberNode(float value) : value_(value){};
   NumberNode(std::string value) : value_(std::stof(value)){};
-  float evaluate() { return value_; };
+  float evaluate() override;
+  void print(int depth) override;
 };
 
 class VariableNode : public Node {
@@ -34,11 +36,9 @@ class VariableNode : public Node {
 
  public:
   VariableNode(std::string name) : name_(name){};
-  float evaluate() { return VARIABLES[name_]; };
-  float assign(float value) {
-    std::cout << name_ << " = " << value << std::endl;  // DEBUG
-    return (VARIABLES[name_] = value);
-  };
+  float assign(float value);
+  float evaluate() override;
+  void print(int depth) override;
 };
 
 class BinaryOpNode : public Node {
@@ -48,22 +48,8 @@ class BinaryOpNode : public Node {
 
  public:
   BinaryOpNode(std::string op, Node *left, Node *right) : operator_(op), left_(left), right_(right){};
-  float evaluate() {
-    if (operator_ == "=")
-      return static_cast<VariableNode *>(left_)->assign(right_->evaluate());
-
-    float x = left_->evaluate(), y = right_->evaluate();
-    if (operator_ == "+")
-      return x + y;
-    if (operator_ == "-")
-      return x - y;
-    if (operator_ == "*")
-      return x * y;
-    if (operator_ == "/")
-      return x / y;
-    if (operator_ == "^")
-      return pow(x, y);
-  };
+  float evaluate() override;
+  void print(int depth) override;
 };
 
 class UnaryOpNode : public Node {
@@ -73,10 +59,8 @@ class UnaryOpNode : public Node {
 
  public:
   UnaryOpNode(std::string op, Node *left) : operator_(op), left_(left){};
-  float evaluate() {
-    if (operator_ == "-")
-      return -1 * left_->evaluate();
-  };
+  float evaluate() override;
+  void print(int depth) override;
 };
 
 class Tree {
@@ -85,16 +69,9 @@ class Tree {
 
  public:
   Tree(){};
-  float evaluate() {
-    float result;
-    for (Node *node : rows_) {
-      result = node->evaluate();
-    }
-    return result;
-  }
-  void add_node(Node *node) {
-    rows_.push_back(node);
-  }
+  void add_node(Node *node);
+  float evaluate();
+  void print(int depth);
 };
 
 class IfNode : public Node {
@@ -105,10 +82,6 @@ class IfNode : public Node {
 
  public:
   IfNode(Node *condition, Tree *then, Tree *_else) : condition_(condition), then_(then), else_(_else){};
-  float evaluate() {
-    if (condition_->evaluate())
-      return then_->evaluate();
-    if (else_ != nullptr)
-      return else_->evaluate();
-  };
+  float evaluate();
+  void print(int depth);
 };
