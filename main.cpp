@@ -5,18 +5,8 @@
 #include "ast.hpp"
 #include "builder.hpp"
 
-void print_queue(std::queue<Token> q) {
-  while (!q.empty()) {
-    std::cout << q.front() << " ";
-    q.pop();
-  }
-  std::cout << std::endl;
-}
-
 int main(int argc, char* argv[]) {
-  // string expression = argv[1];
-
-  Tree* AST = Builder().BuildTree("math.txt");
+  Tree* AST = Builder().BuildTree(argv[1]);
   AST->print(0);
   float result = AST->evaluate();
   std::cout << "result = " << result << std::endl;
