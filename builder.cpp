@@ -1,15 +1,6 @@
 
 #include "builder.hpp"
 
-std::string RemoveSpaces(std::string str) {
-  size_t pos = str.find(' ');
-  while (pos != std::string::npos) {
-    str.erase(pos, 1);
-    pos = str.find(' ', pos);
-  }
-  return str;
-}
-
 inline bool StartsWith(std::string str, std::string prefix) {
   return str.rfind(prefix, 0) == 0;
 }

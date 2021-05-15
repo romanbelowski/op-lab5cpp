@@ -7,6 +7,7 @@
 
 class ShuntingYard {
  private:
+  std::string RemoveSpaces(std::string str);
   std::queue<Token> SplitExpression(std::string str);
   std::queue<Token> Infix2Postix(std::queue<Token>& infix);
 

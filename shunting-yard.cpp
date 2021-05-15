@@ -1,5 +1,14 @@
 #include "shunting-yard.hpp"
 
+std::string ShuntingYard::RemoveSpaces(std::string str) {
+  size_t pos = str.find(' ');
+  while (pos != std::string::npos) {
+    str.erase(pos, 1);
+    pos = str.find(' ', pos);
+  }
+  return str;
+}
+
 // Повертає позицію наступного токена-оператора починаючи з start_pos
 inline size_t next_token_pos(std::string str, size_t start_pos) {
   return str.find_first_of(TOKENS, start_pos);
@@ -91,6 +100,6 @@ std::queue<Token> ShuntingYard::Infix2Postix(std::queue<Token>& infix) {
 
 // Перетворює вираз з інфіксної нотації в постфіксну
 std::queue<Token> ShuntingYard::Process(std::string str) {
-  std::queue<Token> queue = SplitExpression(str);
+  std::queue<Token> queue = SplitExpression(RemoveSpaces(str));
   return Infix2Postix(queue);
 }
