@@ -85,13 +85,6 @@ class Tree {
 
  public:
   Tree(){};
-  Tree(std::vector<std::string> rows) {
-    ShuntingYard yard = ShuntingYard();
-    for (const std::string row : rows) {
-      add_row(yard.Process(row));
-    }
-  };
-
   float evaluate() {
     float result;
     for (Node *node : rows_) {
@@ -99,39 +92,23 @@ class Tree {
     }
     return result;
   }
-  void add_row(std::queue<Token> row) {
-    std::stack<Node *> values;
-    Node *result, *x, *y;
-
-    while (!row.empty()) {
-      Token token = row.front();
-      Type type = token.GetType();
-
-      row.pop();
-
-      switch (type) {
-        case VALUE:
-          if (std::isdigit(token.GetToken()[0]))
-            result = new NumberNode(token.GetToken());
-          else
-            result = new VariableNode(token.GetToken());
-          break;
-        case BINARY_OPERATOR:
-          y = values.top();
-          values.pop();
-          x = values.top();
-          values.pop();
-          result = new BinaryOpNode(token.GetToken(), x, y);
-          break;
-        case UNARY_OPERATOR:
-          x = values.top();
-          values.pop();
-          result = new UnaryOpNode(token.GetToken(), x);
-          break;
-      }
-      values.push(result);
-    }
-    // std::cout << "TOP -> " << values.top()->evaluate() << std::endl;  // DEBUG
-    rows_.push_back(values.top());
+  void add_node(Node *node) {
+    rows_.push_back(node);
   }
+};
+
+class IfNode : public Node {
+ private:
+  std::string operator_;
+  Node *condition_;
+  Tree *then_, *else_;
+
+ public:
+  IfNode(Node *condition, Tree *then, Tree *_else) : condition_(condition), then_(then), else_(_else){};
+  float evaluate() {
+    if (condition_->evaluate())
+      return then_->evaluate();
+    if (else_ != nullptr)
+      return else_->evaluate();
+  };
 };

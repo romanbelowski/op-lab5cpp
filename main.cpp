@@ -3,11 +3,7 @@
 #include <string>
 
 #include "ast.hpp"
-#include "parser.hpp"
-#include "shunting-yard.hpp"
-#include "token.hpp"
-
-// using namespace std;
+#include "builder.hpp"
 
 void print_queue(std::queue<Token> q) {
   while (!q.empty()) {
@@ -19,20 +15,10 @@ void print_queue(std::queue<Token> q) {
 
 int main(int argc, char* argv[]) {
   // string expression = argv[1];
-  Parser parser = Parser();
 
-  //     std::string expression = "a= 2*-(1 + 1)";
-  // ShuntingYard yard = ShuntingYard();
-  // std::queue<Token> queue = yard.Parse(expression);
-
-  // std::cout << "Reverse polish notation:" << std::endl;
-  // print_queue(queue);
-
-  Tree tree = Tree(parser.Read("math.txt"));
-  float result = tree.evaluate();
+  Tree* AST = Builder().BuildTree("math.txt");
+  float result = AST->evaluate();
   std::cout << "result = " << result << std::endl;
-  // tree.add_row(queue);
-  // tree.evaluate();
 
   return 0;
 }
