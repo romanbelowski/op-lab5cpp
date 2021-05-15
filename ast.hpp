@@ -15,8 +15,8 @@ extern std::map<std::string, float> VARIABLES;
 class Node {
  public:
   Node(){};
-  virtual float evaluate() = 0;
-  virtual void print(int depth) = 0;
+  virtual float evaluate() = 0;       // Рекурсивно обчислює через обхід в зворотньому порядку
+  virtual void print(int depth) = 0;  // Рекурсивно виводить через сииметричний обхід
 };
 
 class NumberNode : public Node {
