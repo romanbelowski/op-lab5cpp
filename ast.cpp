@@ -70,6 +70,17 @@ void IfNode::print(int depth) {
   else_->print(depth + 1);
 }
 
+float WhileNode::evaluate() {
+  float result;
+  while (condition_->evaluate()){
+    result = body_->evaluate();
+  }
+  return result;
+}
+
+void WhileNode::print(int depth){} 
+
+
 float Tree::evaluate() {
   float result;
   for (Node *node : rows_) {

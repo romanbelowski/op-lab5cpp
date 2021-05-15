@@ -76,12 +76,22 @@ class Tree {
 
 class IfNode : public Node {
  private:
-  std::string operator_;
   Node *condition_;
   Tree *then_, *else_;
 
  public:
   IfNode(Node *condition, Tree *then, Tree *_else) : condition_(condition), then_(then), else_(_else){};
+  float evaluate();
+  void print(int depth);
+};
+
+class WhileNode : public Node {
+ private:
+  Node *condition_;
+  Tree *body_;
+
+ public:
+  WhileNode(Node *condition, Tree *body) : condition_(condition), body_(body){};
   float evaluate();
   void print(int depth);
 };
