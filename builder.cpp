@@ -81,6 +81,12 @@ Tree* Builder::BuildTreeByDepth(int depth, std::ifstream& file, std::string& nex
         _else = BuildTreeByDepth(depth + 1, file, line);
       }
       tree->add_node(new IfNode(condition, then, _else));
+    } else if (StartsWith(line, prefix + "while ")) {
+      std::cout << "with 'while ' ->" << line << std::endl;
+      std::string s_condition = line.substr(4 * depth + 6, line.find(':') - 4 * depth - 6);
+      Node* condition = BuildNode(yard.Process(s_condition));
+      Tree* body = BuildTreeByDepth(depth + 1, file, line);
+      tree->add_node(new WhileNode(condition, body));
     } else if (line.back() == ';') {
       std::cerr << "with ';'       ->" << line << std::endl;
       std::string row = line.substr(0, line.size() - 1);
